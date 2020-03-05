@@ -6,7 +6,6 @@
 #include<string>
 #include"CStudent.h"
 #include"CStudentMg.h"
-using namespace std;
 
 class CMainView
 {
@@ -21,25 +20,25 @@ public:
     void showMenu();
 
     //view all stu
-    void showAllstuAtView(const map<int,CStudent> & stu_m1);
+    void showAllstuAtView(const std::map<int,CStudent> & stu_m1);
 
     //view add one
-    void addStuAtView(map<int,CStudent> &stu_m1);
+    void addStuAtView(std::map<int,CStudent> &stu_m1);
 
     //view find one
-    void findStuAtView(const map<int,CStudent> &stu_m1);
+    void findStuAtView(const std::map<int,CStudent> &stu_m1);
 
     //dele one
-    void deleteByIdAtView(map<int,CStudent> &stu_m1);
+    void deleteByIdAtView(std::map<int,CStudent> &stu_m1);
 
     //update
-    void updateByIdAtView(map<int,CStudent> &stu_m1);
+    void updateByIdAtView(std::map<int,CStudent> &stu_m1);
 
     //save to flie
-    void saceToFileAtView(map<int,CStudent> &stu_m1,string pathname);
+    void saceToFileAtView(std::map<int,CStudent> &stu_m1,std::string pathname);
 
     //read from file
-    void readFromFileAtView(map<int,CStudent> &stu_m1,string pathname);
+    void readFromFileAtView(std::map<int,CStudent> &stu_m1,std::string pathname);
 
 private:
 

@@ -50,9 +50,9 @@ void CMainView::addStuAtView(map<int,CStudent> &stu_m1){
     int age;
     cout<<"input id:";
     cin>>id;
-    cout<<" name";
+    cout<<"name:";
     cin>>name;
-    cout<<" age";
+    cout<<"age:";
     cin>>age;
     CStudent cStu;
     cStu.setId(id);
@@ -74,7 +74,7 @@ void CMainView::findStuAtView(const map<int,CStudent> &stu_m1){
     CStudent cStu;
     CStudentMg cStuMg;
     cStu=cStuMg.findById(stu_m1,id);
-    if(cStu.getId!=-1){
+    if(cStu.getId()!=-1){
         cout<<cStu<<endl;
     }
     else{
@@ -116,18 +116,68 @@ void CMainView::updateByIdAtView(map<int,CStudent> &stu_m1){
     string name;
     cout<<"input the name of the sutdent"<<endl;
     cin>>name;
-    
+    int age;
+    cout<<"age";
+    cin>>age;
+
+    CStudent cStu;
+    cStu.setAge(age);
+    cStu.setId(id);
+    cStu.setName(name);
+    CStudentMg CstuMg;
+    CStudent cStu2=CstuMg.updateStu(stu_m1,cStu);
+    if(cStu.getId()!=-1){
+        cout<<cStu2<<endl;
+    }
+    else{
+        cout<<"can't find this people"<<endl;
+    }
+    system("pause");
+    system("cls");
+    welcome();
+    showMenu();
 
 }
 
 //save to flie
 void CMainView::saceToFileAtView(map<int,CStudent> &stu_m1,string pathname){
-
+    if(stu_m1.begin()==stu_m1.end()){
+        system("cls");
+        cout<<"no student can't save"<<endl;
+    }
+    else{
+        CStudentMg cStuMg;
+        bool b=cStuMg.saveToFile(stu_m1,pathname);
+        if(b){
+            system("cls");
+            cout<<"save success"<<endl;
+        }
+        else{
+            cout<<"save falure"<<endl;
+        }
+    }
+    system("pause");
+    system("cls");
+    welcome();
+    showMenu();
 
 }
 
 //read from file
 void CMainView::readFromFileAtView(map<int,CStudent> &stu_m1,string pathname){
-
+    system("cls");
+    CStudentMg cStuMg;
+    bool b=cStuMg.readFromFile(stu_m1,pathname);
+        if(b){
+            system("cls");
+            cout<<"read success"<<endl;
+        }
+        else{
+            cout<<"read falure"<<endl;
+        }
+    system("pause");
+    system("cls");
+    welcome();
+    showMenu();
 
 }
