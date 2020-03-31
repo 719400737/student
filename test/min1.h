@@ -1,1 +1,0 @@
-int min1(int i,int j);

@@ -8,76 +8,127 @@
 
 using namespace std;
 
+MYSQL_RES *res;
+MYSQL_ROW row;
+
 CStudentMg::CStudentMg(){}
 CStudentMg::~CStudentMg(){}
 
-CStudent CStudentMg::addAStu(map<int,CStudent> & m1,CStudent & stu){
-    m1.insert(make_pair(stu.getId(),stu));
+CStudent CStudentMg::addAStu(MYSQL *mysql,CStudent & stu){
+    char sqlstr[1024];
+    int id=stu.getId();
+    string name=stu.getName();
+    const char *n=name.c_str();
+    int age=stu.getAge();
+    int len = sprintf(sqlstr, "INSERT INTO student2 \
+							  VALUES('%d','%s','%d');",id,n,age);
+    mysql_query(mysql,sqlstr);
     return stu;
 }
 
 //del
-bool  CStudentMg::deleteStuById(map<int,CStudent> &m1,const int & id){
+bool  CStudentMg::deleteStuById(MYSQL *mysql,const int & id){
     bool b=false;
-    map<int,CStudent>::iterator it;
-    it=m1.find(id);
-    if(it!=m1.end()){
-        m1.erase(it);
+    char sqlstr[1024];
+    int len;
+    len=sprintf(sqlstr,"select * from student2 where id='%d'",id);
+    mysql_query(mysql,sqlstr);
+	res = mysql_store_result(mysql);
+    row = mysql_fetch_row(res);
+    if(row){
         b=true;
+        len=sprintf(sqlstr,"delete from student2 where id='%d';",id);
+        mysql_query(mysql,sqlstr);
     }
-    
+    mysql_free_result(res);
     return b;
 }
 
 //updata
-CStudent CStudentMg::updateStu(map<int,CStudent> &m1,const CStudent &cstu){
-    CStudent stu;
+void CStudentMg::updateStu(MYSQL *mysql,const CStudent &cstu){
+
     int id=cstu.getId();
-    map<int,CStudent>::iterator it;
-    it=m1.find(id);
-    if(it!=m1.end()){
-        it->second=cstu;
-        stu=cstu;
+    char sqlstr[1024];
+    int len;
+    len=sprintf(sqlstr,"select * from student2 where id='%d'",id);
+    mysql_query(mysql,sqlstr);
+	res = mysql_store_result(mysql);
+    row = mysql_fetch_row(res);
+    if(row){
+        string name=cstu.getName();
+        const char *n=name.c_str();
+        int age=cstu.getAge();
+        len=sprintf(sqlstr,"update student2 set name='%s' where id='%d';",n,id);
+        mysql_query(mysql,sqlstr);
+        len=sprintf(sqlstr,"update student2 set age='%d' where id='%d';",age,id);
+        mysql_query(mysql,sqlstr);
+        mysql_free_result(res);
+        return;
+        
     }
-    return stu;
+    cout<<"can't find this student"<<endl;
+    mysql_free_result(res);
+
 }
 
 //find
-CStudent CStudentMg::findById(const map<int,CStudent> &m1,const int & id){
+void CStudentMg::findById(MYSQL *mysql,const int & id){
 
-    CStudent stu;
-    map<int,CStudent>::const_iterator it;
-    it=m1.find(id);
-    if(it!=m1.end()){
-        stu=it->second;
+
+    char sqlstr[1024];
+    int len;
+    len=sprintf(sqlstr,"select * from student2 where id='%d'",id);
+    mysql_query(mysql,sqlstr);
+	res = mysql_store_result(mysql);
+    row = mysql_fetch_row(res);
+    if(row){
+        cout << left << setw(8) << row[0];
+		cout << left << setw(8) << row[1];
+		cout << left << setw(8) << row[2];
+		cout << endl;
     }
-    return stu;
+    mysql_free_result(res);
+
 }
 
 //showall
-void CStudentMg::showAll(const map<int,CStudent> &m1) const{
-    for(auto p:m1){
-        cout<<p.second<<endl;
-    }
+void CStudentMg::showAll(MYSQL *mysql) const{
+    mysql_query(mysql,"select * from student2");
+	res = mysql_store_result(mysql);
+	printf("sno\tname\tage\t\n");
+	while (row = mysql_fetch_row(res))
+	{
+		cout << left << setw(8) << row[0];
+		cout << left << setw(8) << row[1];
+		cout << left << setw(8) << row[2];
+		cout << endl;
+	}
+	mysql_free_result(res);
 
 
 }
 
 //save to file
-bool CStudentMg::saveToFile(const map<int,CStudent> &m1,string pathName){
+bool CStudentMg::saveToFile(MYSQL *mysql,string pathName){
 
     bool b=true;
-
+    mysql_query(mysql,"select * from student2");
+	res = mysql_store_result(mysql);
+	printf("sno\tname\tage\t\n");
+	
     fstream ofs(pathName,ios::out);
     if(ofs){
         stringstream ss;
         cout<<"open the file"<<endl;
-
-        CStudent stu;
-        for(auto p=m1.begin();p!=m1.end();p++){
-            stu=p->second;
-            ss<<stu<<endl;
+        ss<<"sno\tname\tage\t\n";
+        while (row = mysql_fetch_row(res))
+        {
+            ss << left << setw(8) << row[0];
+            ss << left << setw(8) << row[1];
+            ss << left << setw(8) << row[2];
+            ss << endl;
         }
+	    mysql_free_result(res);
         ofs<<ss.str();
         ofs.close();
     }

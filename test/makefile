@@ -1,7 +1,13 @@
-objects=main.o min1.o
-edit:$(objects)
-	g++ $(objects) -o edit 
-main.o:min1.h
-.PHONY:clean
+OBJECTS=main.o add.o
+all:main
+main:$(OBJECTS)
+	g++ $(OBJECTS) -o main
+#main.o:add.h
 clean:
-	-rmedit $(objects)
+	-rm -rf *.o
+
+
+
+
+
+

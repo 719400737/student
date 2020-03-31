@@ -3,28 +3,30 @@
 #include"CStudent.h"
 #include<map>
 #include<string>
+#include<mysql/mysql.h>
+#include <iomanip>
 
 class CStudentMg{
 public:
     CStudentMg();
     ~CStudentMg();
     //add
-    CStudent addAStu(std::map<int,CStudent> &m1,CStudent &stu);
+    CStudent addAStu(MYSQL *mysql,CStudent &stu);
 
     //del
-    bool deleteStuById(std::map<int,CStudent> &m1,const int & id);
+    bool deleteStuById(MYSQL *mysql,const int & id);
 
     //updata
-    CStudent updateStu(std::map<int,CStudent> &m1,const CStudent &stu);
+    void updateStu(MYSQL *mysql,const CStudent &stu);
 
     //find
-    CStudent findById(const std::map<int,CStudent> &m1,const int & id);
+    void findById(MYSQL *mysql,const int & id);
 
     //showall
-    void showAll(const std::map<int,CStudent> &m1) const;
+    void showAll(MYSQL *mysql) const;
 
     //save to file
-    bool saveToFile(const std::map<int,CStudent> &m1,std::string pathName);
+    bool saveToFile(MYSQL *mysql,std::string pathName);
 
     //read from file
 

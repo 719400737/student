@@ -9,7 +9,6 @@ CMainView::~CMainView(){
     
     //welcome
 void CMainView::welcome(){
-    system("cls");
     cout<<"welcome to our system"<<endl;
 }
 
@@ -23,27 +22,25 @@ void CMainView::showMenu(){
     cout<<"4.delete a stu"<<endl;
     cout<<"5.show all stu"<<endl;
     cout<<"6.save to a file"<<endl;
-    cout<<"7.read from a file"<<endl;
+    //cout<<"7.read from a file"<<endl;
     cout<<"0.exit"<<endl;
     cout<<endl;
     cout<<"please input ";
 }
 
     //view all stu
-void CMainView::showAllstuAtView(const map<int,CStudent> & stu_m1){
-    system("cls");
-    cout<<"id   |"<<"name   |"<<"age"<<endl;
+void CMainView::showAllstuAtView(MYSQL *mysql){
+
     CStudentMg cStuMg;
-    cStuMg.showAll(stu_m1);
-    system("pause");
-    system("cls");
+    cStuMg.showAll(mysql);
+
     welcome();
     showMenu();
 
 }
 
     //view add one
-void CMainView::addStuAtView(map<int,CStudent> &stu_m1){
+void CMainView::addStuAtView(MYSQL *mysql){
     CStudentMg cStuMg;
     int id;
     string name;
@@ -59,57 +56,44 @@ void CMainView::addStuAtView(map<int,CStudent> &stu_m1){
     cStu.setAge(age);
     cStu.setName(name);
 
-    cStuMg.addAStu(stu_m1,cStu);
-    system("cls");
+    cStuMg.addAStu(mysql,cStu);
+    system("clear");
     welcome();
     showMenu();
 }
     
     //view find one
-void CMainView::findStuAtView(const map<int,CStudent> &stu_m1){
-    system("cls");
+void CMainView::findStuAtView(MYSQL *mysql){
+    system("clear");
     cout<<"input the student Id you want to find"<<endl;
     int id;
     cin>>id;
-    CStudent cStu;
     CStudentMg cStuMg;
-    cStu=cStuMg.findById(stu_m1,id);
-    if(cStu.getId()!=-1){
-        cout<<cStu<<endl;
-    }
-    else{
-        cout<<"there are not this student"<<endl;
-    }
-
-    system("pause");
-    system("cls");
+    cStuMg.findById(mysql,id);
     welcome();
     showMenu();
 }
     
     //dele one
-void CMainView::deleteByIdAtView(map<int,CStudent> &stu_m1){
-    system("cls");
+void CMainView::deleteByIdAtView(MYSQL *mysql){
     cout<<"input the student id you want to delete"<<endl;
     int id;
     cin>>id;
     CStudentMg cStuMg;
-    bool b=cStuMg.deleteStuById(stu_m1,id);
+    bool b=cStuMg.deleteStuById(mysql,id);
     if(b){
         cout<<"delete success"<<endl;
     }
     else{
         cout<<"can't find this preson"<<endl;
     }
-    system("pause");
-    system("cls");
     welcome();
     showMenu();
 }
 
 //update
-void CMainView::updateByIdAtView(map<int,CStudent> &stu_m1){
-    system("cls");
+void CMainView::updateByIdAtView(MYSQL *mysql){
+    system("clear");
     cout<<"please input the id of student you want to update"<<endl;
     int id;
     cin>>id;
@@ -117,7 +101,7 @@ void CMainView::updateByIdAtView(map<int,CStudent> &stu_m1){
     cout<<"input the name of the sutdent"<<endl;
     cin>>name;
     int age;
-    cout<<"age";
+    cout<<"age"<<endl;
     cin>>age;
 
     CStudent cStu;
@@ -125,39 +109,26 @@ void CMainView::updateByIdAtView(map<int,CStudent> &stu_m1){
     cStu.setId(id);
     cStu.setName(name);
     CStudentMg CstuMg;
-    CStudent cStu2=CstuMg.updateStu(stu_m1,cStu);
-    if(cStu.getId()!=-1){
-        cout<<cStu2<<endl;
-    }
-    else{
-        cout<<"can't find this people"<<endl;
-    }
-    system("pause");
-    system("cls");
+
+    CstuMg.updateStu(mysql,cStu);
     welcome();
     showMenu();
 
 }
 
 //save to flie
-void CMainView::saceToFileAtView(map<int,CStudent> &stu_m1,string pathname){
-    if(stu_m1.begin()==stu_m1.end()){
-        system("cls");
-        cout<<"no student can't save"<<endl;
-    }
-    else{
+void CMainView::saceToFileAtView(MYSQL *mysql,string pathname){
+
         CStudentMg cStuMg;
-        bool b=cStuMg.saveToFile(stu_m1,pathname);
+        bool b=cStuMg.saveToFile(mysql,pathname);
         if(b){
-            system("cls");
+            system("clear");
             cout<<"save success"<<endl;
         }
         else{
             cout<<"save falure"<<endl;
         }
-    }
-    system("pause");
-    system("cls");
+
     welcome();
     showMenu();
 
@@ -165,18 +136,17 @@ void CMainView::saceToFileAtView(map<int,CStudent> &stu_m1,string pathname){
 
 //read from file
 void CMainView::readFromFileAtView(map<int,CStudent> &stu_m1,string pathname){
-    system("cls");
+    system("clear");
     CStudentMg cStuMg;
     bool b=cStuMg.readFromFile(stu_m1,pathname);
         if(b){
-            system("cls");
+            system("clear");
             cout<<"read success"<<endl;
         }
         else{
             cout<<"read falure"<<endl;
         }
-    system("pause");
-    system("cls");
+    system("clear");
     welcome();
     showMenu();
 

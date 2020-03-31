@@ -6,6 +6,7 @@
 #include<string>
 #include"CStudent.h"
 #include"CStudentMg.h"
+#include<mysql/mysql.h>
 
 class CMainView
 {
@@ -20,22 +21,22 @@ public:
     void showMenu();
 
     //view all stu
-    void showAllstuAtView(const std::map<int,CStudent> & stu_m1);
+    void showAllstuAtView(MYSQL *mysql);
 
     //view add one
-    void addStuAtView(std::map<int,CStudent> &stu_m1);
+    void addStuAtView(MYSQL *mysql);
 
     //view find one
-    void findStuAtView(const std::map<int,CStudent> &stu_m1);
+    void findStuAtView(MYSQL *mysql);
 
     //dele one
-    void deleteByIdAtView(std::map<int,CStudent> &stu_m1);
+    void deleteByIdAtView(MYSQL *mysql);
 
     //update
-    void updateByIdAtView(std::map<int,CStudent> &stu_m1);
+    void updateByIdAtView(MYSQL *mysql);
 
     //save to flie
-    void saceToFileAtView(std::map<int,CStudent> &stu_m1,std::string pathname);
+    void saceToFileAtView(MYSQL *mysql,std::string pathname);
 
     //read from file
     void readFromFileAtView(std::map<int,CStudent> &stu_m1,std::string pathname);
